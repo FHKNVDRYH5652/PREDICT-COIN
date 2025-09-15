@@ -1,147 +1,186 @@
 <!doctype html>
-<html lang="hi">
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Buy Coins — Coin Predictions</title>
-  <style>
-    :root{
-      --bg-overlay: rgba(3,12,20,0.6);
-      --card: rgba(255,255,255,0.04);
-      --accent: #00d2a8;
-      --accent2: #00a6ff;
-      --muted: #9fb0d6;
-      --glass: rgba(255,255,255,0.03);
-    }
-    *{box-sizing:border-box;font-family:Inter, system-ui, Arial, sans-serif}
-    html,body{height:100%;margin:0}
-    body{
-      background: url('anime1.png') center/cover no-repeat fixed;
-      color:#eaf6ff;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:28px;
-    }
-    .wrap{width:100%;max-width:1100px}
-    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
-    .brand{font-weight:800;font-size:20px}
-    .wallet{background:var(--glass);padding:10px 14px;border-radius:10px}
-    .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
-    .card{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 8px 30px rgba(2,6,23,0.7);}
-    h1{margin:0 0 8px 0}
-    .plans{display:flex;flex-wrap:wrap;gap:12px}
-    .plan{background:linear-gradient(180deg,#071425,#08172b);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);cursor:pointer;min-width:150px;text-align:center}
-    .plan.selected{outline:3px solid rgba(0,210,168,0.12);box-shadow:0 6px 18px rgba(0,166,255,0.06)}
-    .muted{color:var(--muted);font-size:13px}
-    input[type=number]{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;margin-top:8px}
-    .btn{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#001;padding:10px 14px;border-radius:8px;border:none;cursor:pointer;font-weight:700}
-    .link-ghost{background:transparent;border:1px solid rgba(255,255,255,0.05);padding:8px 10px;border-radius:8px;color:var(--muted);cursor:pointer}
-    .small{font-size:13px}
-    .qr{width:100%;height:220px;background:linear-gradient(135deg,#0a1520,#06121a);display:flex;align-items:center;justify-content:center;border-radius:10px;margin-top:12px;color:#6fb8d6}
-    footer{margin-top:14px;color:var(--muted);font-size:13px;text-align:center}
-    @media (max-width:880px){ .grid{grid-template-columns:1fr} .qr{height:160px} }
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Plans — Coin Predictions</title>
+<link rel="icon" href="favicon.ico" />
+<style>
+  :root{--accent1:#00d2a8;--accent2:#00a6ff;--muted:#9fb0d6}
+  *{box-sizing:border-box;font-family:Inter,system-ui,Arial}
+  body{margin:0;min-height:100vh;background:url('anime1.png') center/cover fixed;color:#eaf6ff;padding:28px;display:flex;align-items:center;justify-content:center}
+  .wrap{width:100%;max-width:1100px}
+  .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+  .brand{font-weight:800;font-size:20px}
+  .card{background:rgba(2,8,18,0.6);padding:18px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.6)}
+  .plans{display:flex;flex-wrap:wrap;gap:12px}
+  .plan{min-width:150px;padding:14px;border-radius:10px;background:linear-gradient(180deg,#071425,#08172b);cursor:pointer;border:1px solid rgba(255,255,255,0.03);text-align:center}
+  .plan.selected{box-shadow:0 10px 30px rgba(0,166,255,0.06);outline:3px solid rgba(0,210,168,0.08)}
+  input[type=number]{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;width:100%}
+  .btn{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#001;border:none;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:800}
+  .muted{color:var(--muted);font-size:13px}
+  .qr{height:220px;border-radius:10px;background:linear-gradient(135deg,#071827,#092536);display:flex;align-items:center;justify-content:center}
+  .auth {display:flex;gap:8px;align-items:center}
+  @media (max-width:900px){ .plans{justify-content:center} .qr{height:160px} .top{flex-direction:column;gap:10px} }
+</style>
 </head>
 <body>
   <div class="wrap">
-    <div class="topbar">
-      <div class="brand">Coin Predictions — Plans</div>
-      <div class="wallet">Wallet: <strong id="walletTop">0</strong> coins</div>
+    <div class="top">
+      <div class="brand">Coin Predictions</div>
+      <div class="muted">Wallet: <strong id="walletTop">0</strong> coins</div>
     </div>
 
-    <div class="grid">
-      <div class="card">
-        <h1>Choose a plan</h1>
-        <div class="small muted">Minimum <b>100</b> coins (₹50). Maximum <b>4000</b> coins (₹2000).</div>
+    <div class="card">
+      <h2 style="margin:0 0 8px 0">Choose a Plan</h2>
+      <div class="muted">Minimum <b>100</b> coins (₹50). Maximum <b>4000</b> coins (₹2000). Rate: <b>2 coins = ₹1</b>.</div>
 
-        <div style="margin-top:12px" class="plans" id="plansContainer">
-          <!-- plans inserted by JS -->
-        </div>
+      <div style="margin-top:12px" class="plans" id="plansContainer"></div>
 
-        <div style="margin-top:14px">
-          <label class="small">या अपनी quantity डालें (100 - 4000)</label>
-          <input id="manualQty" type="number" min="100" max="4000" value="100" step="1" />
-        </div>
-
-        <div style="margin-top:14px;display:flex;gap:10px">
-          <button class="btn" id="proceedBtn">Proceed to Payment</button>
-          <button class="link-ghost" id="goAdmin">Admin</button>
-        </div>
-
-        <div style="margin-top:12px" class="small muted">Rate: <b>2 coins = ₹1</b> (₹0.5 per coin).</div>
+      <div style="margin-top:12px">
+        <label class="muted">Or enter custom amount (100 - 4000)</label>
+        <input id="manualQty" type="number" min="100" max="4000" value="100">
       </div>
 
-      <div class="card">
-        <h2>Payment QR</h2>
-        <div class="qr">
-          <div>
-            <div style="font-weight:700">QR Placeholder</div>
-            <div class="small muted" style="margin-top:6px">Use your real QR file named <code>qr.png</code></div>
-          </div>
-        </div>
-
-        <div style="margin-top:12px">
-          <div class="small muted">Customer Service</div>
-          <div style="margin-top:8px">
-            <button class="btn" onclick="window.open('https://t.me/Nskskssiwi','_blank')">Contact on Telegram</button>
-          </div>
-        </div>
-
-        <div style="margin-top:12px">
-          <div class="small muted">Quick links</div>
-          <div style="margin-top:8px;display:flex;gap:8px">
-            <button class="link-ghost" id="linkPredict">Go to Prediction</button>
-            <button class="link-ghost" id="linkPayment">Go to Payment</button>
-          </div>
+      <div style="margin-top:12px;display:flex;gap:10px;align-items:center">
+        <button id="proceedBtn" class="btn">Proceed to Payment</button>
+        <button id="goPredict" class="btn" style="background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.04)">Go to Prediction</button>
+        <div style="margin-left:auto" class="auth">
+          <button id="loginBtn" class="btn" style="background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.04)">Login</button>
+          <button id="signupBtn" class="btn" style="background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.04)">Sign up</button>
         </div>
       </div>
+
+      <div style="margin-top:12px" class="muted">Customer Service: <a href="https://t.me/Nskskssiwi" target="_blank" style="color:#bfe">t.me/Nskskssiwi</a></div>
     </div>
-
-    <footer>Store these files together: <code>index.html, payment.html, prediction.html, admin.html, anime1.png, anime2.png, anime3.png, music.m4a, qr.png</code></footer>
   </div>
 
-<script>
-  const presets = [100,200,500,1000,2000,4000];
-  const plansContainer = document.getElementById('plansContainer');
-  const manualQty = document.getElementById('manualQty');
-  let selected = 100;
+  <!-- Auth modal simple -->
+  <div id="authModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);align-items:center;justify-content:center">
+    <div style="background:rgba(2,8,18,0.9);padding:18px;border-radius:10px;max-width:420px;width:90%">
+      <h3 id="authTitle">Login</h3>
+      <input id="authEmail" placeholder="Email" style="width:100%;padding:10px;margin-top:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#fff">
+      <input id="authPass" placeholder="Password" type="password" style="width:100%;padding:10px;margin-top:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#fff">
+      <div style="margin-top:10px;display:flex;gap:8px">
+        <button id="authSubmit" class="btn">Submit</button>
+        <button id="authClose" class="btn" style="background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,0.04)">Cancel</button>
+      </div>
+      <div id="authMsg" style="margin-top:8px;color:#fca"> </div>
+    </div>
+  </div>
 
-  function renderPlans(){
-    plansContainer.innerHTML = '';
-    presets.forEach(p=>{
-      const el = document.createElement('div');
-      el.className='plan';
-      el.innerHTML = `<div style="font-weight:800">${p} coins</div><div class="small muted">₹${(p/2).toFixed(0)}</div>`;
-      el.onclick = ()=>{ selectPlan(p, el); };
-      plansContainer.appendChild(el);
-      if(p===selected) el.classList.add('selected');
-    });
-  }
-  function selectPlan(q, el){
-    selected = q;
-    manualQty.value = q;
-    Array.from(plansContainer.children).forEach(c=> c.classList.remove('selected'));
-    if(el) el.classList.add('selected');
-  }
+<script type="module">
+/* Firebase init (modular). Replace config if needed. */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-  document.getElementById('proceedBtn').addEventListener('click', ()=>{
-    let q = parseInt(manualQty.value||'0',10);
-    if(isNaN(q) || q < 100) { alert('Minimum 100 coins'); manualQty.value=100; return; }
-    if(q > 4000) { alert('Maximum 4000 coins'); manualQty.value=4000; return; }
-    // store pending plan for payment page
-    localStorage.setItem('pendingPlan', String(q));
-    // redirect
-    window.location.href = 'payment.html';
+const firebaseConfig = {
+  apiKey: "AIzaSyBs7eQyMrcN8kJWMHl2ac2UZHlYQ6DypD8",
+  authDomain: "terminal-xxrr.firebaseapp.com",
+  databaseURL: "https://terminal-xxrr-default-rtdb.firebaseio.com",
+  projectId: "terminal-xxrr",
+  storageBucket: "terminal-xxrr.appspot.com",
+  messagingSenderId: "722753278120",
+  appId: "1:722753278120:web:bfa37aab39635a4e57f29d"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+window._fb = { auth, db };
+
+/* UI logic */
+const presets = [100,200,500,1000,2000,4000];
+const plansContainer = document.getElementById('plansContainer');
+const manualQty = document.getElementById('manualQty');
+let selected = 100;
+
+function renderPlans(){
+  plansContainer.innerHTML = '';
+  presets.forEach(p=>{
+    const el = document.createElement('div');
+    el.className = 'plan';
+    el.innerHTML = `<div style="font-weight:800">${p} coins</div><div class="muted">₹${(p/2).toFixed(0)}</div>`;
+    el.onclick = ()=>{ selectPlan(p, el); };
+    plansContainer.appendChild(el);
+    if(p===selected) el.classList.add('selected');
   });
+}
+function selectPlan(q, el){
+  selected = q;
+  manualQty.value = q;
+  Array.from(plansContainer.children).forEach(c=> c.classList.remove('selected'));
+  if(el) el.classList.add('selected');
+}
 
-  document.getElementById('goAdmin').addEventListener('click', ()=> window.location.href = 'admin.html');
-  document.getElementById('linkPredict').addEventListener('click', ()=> window.location.href = 'prediction.html');
-  document.getElementById('linkPayment').addEventListener('click', ()=> window.location.href = 'payment.html');
+document.getElementById('proceedBtn').addEventListener('click', ()=>{
+  let q = parseInt(manualQty.value||'0',10);
+  if(isNaN(q) || q < 100){ alert('Minimum 100 coins'); manualQty.value=100; return; }
+  if(q > 4000){ alert('Maximum 4000 coins'); manualQty.value=4000; return; }
+  localStorage.setItem('pendingPlan', String(q));
+  window.location.href = 'payment.html';
+});
 
-  function updateWalletUI(){ document.getElementById('walletTop').innerText = localStorage.getItem('wallet_coins')||'0'; }
-  renderPlans();
-  updateWalletUI();
+document.getElementById('goPredict').addEventListener('click', ()=> window.location.href = 'prediction.html');
+
+/* Auth UI */
+const authModal = document.getElementById('authModal');
+const authTitle = document.getElementById('authTitle');
+const authEmail = document.getElementById('authEmail');
+const authPass = document.getElementById('authPass');
+const authMsg = document.getElementById('authMsg');
+
+document.getElementById('loginBtn').addEventListener('click', ()=> openAuth('login'));
+document.getElementById('signupBtn').addEventListener('click', ()=> openAuth('signup'));
+document.getElementById('authClose').addEventListener('click', ()=> closeAuth());
+
+function openAuth(mode){
+  authModal.style.display = 'flex';
+  authTitle.innerText = mode === 'login' ? 'Login' : 'Sign up';
+  authMsg.innerText = '';
+  authEmail.value = ''; authPass.value = '';
+  document.getElementById('authSubmit').onclick = ()=> submitAuth(mode);
+}
+function closeAuth(){ authModal.style.display = 'none'; }
+
+async function submitAuth(mode){
+  const email = authEmail.value.trim();
+  const pass = authPass.value;
+  if(!email || !pass){ authMsg.innerText = 'Enter email & password'; return; }
+  authMsg.innerText = 'Please wait...';
+  try{
+    if(mode === 'login'){
+      await signInWithEmailAndPassword(auth, email, pass);
+    } else {
+      const cred = await createUserWithEmailAndPassword(auth, email, pass);
+      // create user doc with wallet 0
+      await setDoc(doc(db, 'users', cred.user.uid), { email: email, wallet: 0 });
+    }
+    authMsg.innerText = 'Success';
+    setTimeout(()=> closeAuth(), 600);
+  }catch(err){
+    authMsg.innerText = err.message;
+  }
+}
+
+/* show wallet top if logged in */
+onAuthStateChanged(auth, user=>{
+  if(user){
+    // listen to user's wallet
+    const udoc = doc(db, 'users', user.uid);
+    const unsub = onSnapshot(udoc, snap=>{
+      const data = snap.exists() ? snap.data() : null;
+      document.getElementById('walletTop').innerText = data ? (data.wallet||0) : 0;
+    });
+  } else {
+    document.getElementById('walletTop').innerText = localStorage.getItem('wallet_coins')||'0';
+  }
+});
+
+/* initial render */
+renderPlans();
+document.getElementById('walletTop').innerText = localStorage.getItem('wallet_coins')||'0';
 </script>
 </body>
 </html>
